@@ -1,0 +1,113 @@
+{
+	"info": {
+		"_postman_id": "f5dfc486-f304-4a96-842e-e0871152cc21",
+		"name": "fravega test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "autocomplete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var autocompleteData = pm.response.json ();\r",
+							"var count = autocompleteData.count ();\r",
+							"for (var i = 0; i <count; i ++) {\r",
+							"    if (autocompleteData[i].name == \"Lagunitas Brewing Co\")\r",
+							"    {\r",
+							"        var id = autocompleteData[i].id;\r",
+							"        //console.log (autocompleteData[i].id);\r",
+							"        console.log (id);\r",
+							"     \r",
+							"        pm.sendRequest(\"https://api.openbrewerydb.org/breweries/\"+ id, function (err, response) {\r",
+							"            console.log(response.json());\r",
+							"        });\r",
+							"        var  breweriesData = pm.response.json ();\r",
+							"        var count = breweriesData.count ();\r",
+							"        for (var i = 0; i <count; i ++) {\r",
+							"            if (breweriesData[i].state == \"California\"){\r",
+							"                pm.expect(breweriesData[i].id).to.eql(\"761\");\r",
+							"                pm.expect(breweriesData[i].name).to.eql(\"Lagunitas Brewing Co\");\r",
+							"                pm.expect(breweriesData[i].street).to.eql(\"1280 N McDowell Blvd\");\r",
+							"                pm.expect(breweriesData[i].phone).to.eql(\"7077694495\");\r",
+							"            }\r",
+							"        }    \r",
+							"    }\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openbrewerydb.org/breweries/autocomplete?query=lagunitas",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openbrewerydb",
+						"org"
+					],
+					"path": [
+						"breweries",
+						"autocomplete"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "lagunitas"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"var autocompleteData = pm.response.json ();",
+					"var count = autocompleteData.count ();",
+					"for (var i = 0; i <count; i ++) {",
+					"    if (autocompleteData[i].name == \"Lagunitas Brewing Co\")",
+					"    {",
+					"        var id = autocompleteData[i].id;",
+					"        //console.log (autocompleteData[i].id);",
+					"        console.log (id);",
+					"     ",
+					"        pm.sendRequest(\"https://api.openbrewerydb.org/breweries/\"+ id, function (err, response) {",
+					"            console.log(response.json());",
+					"        });",
+					"        var  breweriesData = pm.response.json ();",
+					"        var count = breweriesData.count ();",
+					"        for (var i = 0; i <count; i ++) {",
+					"            if (breweriesData[i].state == \"California\"){",
+					"                pm.expect(breweriesData[i].id).to.eql(\"761\");",
+					"                pm.expect(breweriesData[i].name).to.eql(\"Lagunitas Brewing Co\");",
+					"                pm.expect(breweriesData[i].street).to.eql(\"1280 N McDowell Blvd\");",
+					"                pm.expect(breweriesData[i].phone).to.eql(\"7077694495\");",
+					"            }",
+					"        }    ",
+					"    }",
+					"}"
+				]
+			}
+		}
+	]
+}
